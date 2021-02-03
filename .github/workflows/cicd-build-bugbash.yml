@@ -38,6 +38,6 @@ jobs:
       with: 
         scan-results-path: ${{steps.container-scan.outputs.scan-report-path}} 
         connection-string: InstrumentationKey=113811e2-5408-418a-95ec-5d0924b384c7;IngestionEndpoint=https://westus-0.in.applicationinsights.azure.com/
-        subscription-token: c00d16c7-6c1f-4c03-9be1-6934a4c49682  
+        subscription-token: c00d16c7-6c1f-4c03-9be1-6934a4c49682.c00d16c7-6c1f-4c03-9be1-6934a4c49682
     
 
