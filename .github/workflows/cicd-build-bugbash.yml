@@ -3,10 +3,10 @@ on: [push]
 jobs:
   build:
     env:
-      REGISTRY_URL_1: jysintestregistry.azurecr.io
+      REGISTRY_URL_1: jysintestregistry2.azurecr.io
       REGISTRY_USERNAME_1: ${{ secrets.AZURE_CLIENT_ID }}
       REGISTRY_PASSWORD_1: ${{ secrets.AZURE_CLIENT_SECRET }}
-      IMAGE_NAME_1: jysintestregistry.azurecr.io/jysindemoimage2:${{ github.sha }}
+      IMAGE_NAME_1: jysintestregistry2.azurecr.io/jysindemoimage21:${{ github.sha }}
 
     runs-on: ubuntu-latest
     steps:
