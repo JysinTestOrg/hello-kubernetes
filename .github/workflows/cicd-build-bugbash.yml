@@ -1,0 +1,26 @@
+on: [push]
+  
+jobs:
+  build-and-deploy:
+    env:
+      REGISTRY_URL_1: jysintestregistry.azurecr.io
+      REGISTRY_USERNAME_1: ${{ secrets.AZURE_CLIENT_ID }}
+      REGISTRY_PASSWORD_1: ${{ secrets.AZURE_CLIENT_SECRET }}
+      IMAGE_NAME_1: jysintestregistry.azurecr.io/jysindemoimage:${{ github.sha }}
+
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    
+    - name: Login to ACR
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.REGISTRY_URL_1 }}
+        username: ${{ env.REGISTRY_USERNAME_1 }}
+        password: ${{ env.REGISTRY_PASSWORD_1 }}
+    
+    - run: |
+        docker build . -t ${{ env.IMAGE_NAME_1 }} 
+        docker push ${{ env.IMAGE_NAME_1 }}
+    
+
