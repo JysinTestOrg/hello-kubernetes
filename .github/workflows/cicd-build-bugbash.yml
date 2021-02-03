@@ -1,7 +1,7 @@
 on: [push]
   
 jobs:
-  build-and-deploy:
+  build:
     env:
       REGISTRY_URL_1: jysintestregistry.azurecr.io
       REGISTRY_USERNAME_1: ${{ secrets.AZURE_CLIENT_ID }}
@@ -21,6 +21,23 @@ jobs:
     
     - run: |
         docker build . -t ${{ env.IMAGE_NAME_1 }} 
+  
+    -  uses: Azure/container-scan@v0 
+       name: Scan images for vulnerabilities 
+       id: container-scan 
+       continue-on-error: true
+       with: 
+         image-name: ${{ env.IMAGE_NAME_1 }} 
+    
+    - name: Push docker image to Azure Container Registry 
+      run: | 
         docker push ${{ env.IMAGE_NAME_1 }}
+        
+    - name: Post logs to appinsights 
+      uses: Azure/publish-security-assessments@v0 
+      with: 
+        scan-results-path: ${{steps.container-scan.outputs.scan-report-path}} 
+        connection-string: InstrumentationKey=113811e2-5408-418a-95ec-5d0924b384c7;IngestionEndpoint=https://westus-0.in.applicationinsights.azure.com/
+        subscription-token: c00d16c7-6c1f-4c03-9be1-6934a4c49682  
     
 
