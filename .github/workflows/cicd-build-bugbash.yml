@@ -6,7 +6,7 @@ jobs:
       REGISTRY_URL_1: jysintestregistry.azurecr.io
       REGISTRY_USERNAME_1: ${{ secrets.AZURE_CLIENT_ID }}
       REGISTRY_PASSWORD_1: ${{ secrets.AZURE_CLIENT_SECRET }}
-      IMAGE_NAME_1: jysintestregistry.azurecr.io/jysindemoimage:${{ github.sha }}
+      IMAGE_NAME_1: jysintestregistry.azurecr.io/jysindemoimage2:${{ github.sha }}
 
     runs-on: ubuntu-latest
     steps:
