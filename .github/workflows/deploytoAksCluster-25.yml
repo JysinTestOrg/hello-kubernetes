@@ -1,0 +1,65 @@
+on: [push]
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    
+    - uses: azure/docker-login@v1
+      with:
+        login-server: jysintestregistry.azurecr.io
+        username: ${{ secrets.acr_jysintestregistry_username }}
+        password: ${{ secrets.acr_jysintestregistry_password }}
+    
+    - name: Build and push image to ACR
+      id: build-image
+      run: |
+        docker build "$GITHUB_WORKSPACE/" -f  "Dockerfile" -t jysintestregistry.azurecr.io/jysinaks1:${{ github.sha }} --label dockerfile-path=Dockerfile
+        docker push jysintestregistry.azurecr.io/jysinaks1:${{ github.sha }}
+    
+    - uses: azure/k8s-set-context@v1
+      with:
+         kubeconfig: ${{ secrets.aks_jysinaks1_kubeConfig }}
+      id: login
+    
+    - name: Create namespace
+      run: |
+        namespacePresent=`kubectl get namespace | grep jysindemo6 | wc -l`
+        if [ $namespacePresent -eq 0 ]
+        then
+            echo `kubectl create namespace jysindemo6`
+        fi
+
+    - uses: azure/k8s-create-secret@v1
+      with:
+        namespace: jysindemo6
+        container-registry-url: jysintestregistry.azurecr.io
+        container-registry-username: ${{ secrets.acr_jysintestregistry_username }}
+        container-registry-password: ${{ secrets.acr_jysintestregistry_password }}
+        secret-name: jysinaks1dockerauth
+       
+    - uses: azure/k8s-bake@v1
+      with:
+        renderEngine: 'helm'
+        helmChart: helmcharts
+        releaseName: 'aks-helm-release'
+        helm-version: 'latest' 
+        silent: 'false'
+        overrideFiles: |
+          
+        overrides: |
+          replicas:2
+          image.repository:jysintestregistry.azurecr.io/jysinaks1
+          image.tag:${{ github.sha }}
+          imagePullSecrets:
+            -name:jysinaks1dockerauth
+      id: bake
+
+    - uses: azure/k8s-deploy@v1.2
+      with:
+        namespace: jysindemo6
+        manifests: ${{ steps.bake.outputs.manifestsBundle }}
+        images: |
+          jysintestregistry.azurecr.io/jysinaks1:${{ github.sha }}
+        imagepullsecrets: |
+          jysinaks1dockerauth
