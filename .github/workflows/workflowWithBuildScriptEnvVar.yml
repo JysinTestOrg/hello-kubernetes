@@ -21,7 +21,7 @@ jobs:
         
     - run: |
         docker build . -t  ${{ env.IMAGE_NAME_1 }} --label dockerfile-path=./Dockerfile
-        docker push j${{ env.IMAGE_NAME_1 }}  
+        docker push ${{ env.IMAGE_NAME_1 }}  
         
     - uses: azure/k8s-set-context@v1
       with:
