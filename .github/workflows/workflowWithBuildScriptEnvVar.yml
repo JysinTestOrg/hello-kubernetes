@@ -4,25 +4,28 @@ env:
     REGISTRY_URL_1: jysintestregistry.azurecr.io
     REGISTRY_USERNAME_1: ${{ secrets.AZURE_CLIENT_ID }}
     REGISTRY_PASSWORD_1: ${{ secrets.AZURE_CLIENT_SECRET }}
-    IMAGE_NAME_1: jysintestregistry.azurecr.io/jysindemoimage:first
+    IMAGE_NAME_1: jysintestregistry.azurecr.io/jysindemoimage:${{ github.sha }}
     
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
-      
-    - uses: azure/k8s-set-context@v1
-      with:
-         kubeconfig: ${{ secrets.AKS_JYSINAKS2_KUBECONFIG }}
-      id: login
  
     - name: Login to ACR
       uses: docker/login-action@v1
       with:
-        registry: ${{ env.REGISTRY_URL }}
-        username: ${{ env.CR_USERNAME }}
-        password: ${{ env.CR_PASSWORD }}
+        registry: ${{ env.REGISTRY_URL_1 }}
+        username: ${{ env.REGISTRY_USERNAME_1 }}
+        password: ${{ env.REGISTRY_PASSWORD_1 }}
+        
+    - run: |
+        docker build . -t  ${{ env.IMAGE_NAME_1 }} --label dockerfile-path=./Dockerfile
+        docker push j${{ env.IMAGE_NAME_1 }}  
+        
+    - uses: azure/k8s-set-context@v1
+      with:
+         kubeconfig: ${{ secrets.AKS_JYSINAKS2_KUBECONFIG }}    
     
     - name: Create namespace
       run: |
