@@ -16,6 +16,13 @@ jobs:
       with:
          kubeconfig: ${{ secrets.AKS_JYSINAKS2_KUBECONFIG }}
       id: login
+ 
+    - name: Login to ACR
+      uses: docker/login-action@v1
+      with:
+        registry: ${{ env.REGISTRY_URL }}
+        username: ${{ env.CR_USERNAME }}
+        password: ${{ env.CR_PASSWORD }}
     
     - name: Create namespace
       run: |
