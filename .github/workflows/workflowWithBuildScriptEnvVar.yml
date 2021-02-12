@@ -33,7 +33,7 @@ jobs:
         container-registry-password: ${{ env.REGISTRY_PASSWORD_1 }}
         secret-name: demo-k8s-secret
             
-    - uses: Azure/k8s-deploy@users/jysin/ConfigFilePathsAddition1_3
+    - uses: Azure/k8s-deploy@features/traceability
       with:
         namespace: ${{ env.NAMESPACE  }}
         imagepullsecrets: demo-k8s-secret
