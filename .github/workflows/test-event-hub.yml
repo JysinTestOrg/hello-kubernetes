@@ -10,5 +10,8 @@ jobs:
     - uses: actions/checkout@master
     
     - name: Run script
-      script: |
-      node send.js
+      run: |
+        npm install @azure/event-hubs
+        npm install @azure/storage-blob
+        npm install @azure/eventhubs-checkpointstore-blob
+        node send.js
