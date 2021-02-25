@@ -1,0 +1,14 @@
+on: [push]
+
+jobs:
+  build-and-deploy:
+    env:
+      REGISTRY_URL: jysintestregistry.azurecr.io
+      
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    
+    - name: Run script
+      script: |
+      node send.js
