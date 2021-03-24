@@ -5,7 +5,7 @@ on: [push]
 jobs:
   print:
     name: Print secret
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
     - name: Make REST call
       run: |
