@@ -12,4 +12,4 @@ jobs:
       
     - name: Make REST call
       run: |
-        bash MakeRestCall.sh ${{ secrets.L2_TOKEN }}
+        bash MakeRestCall_WebApp.sh
