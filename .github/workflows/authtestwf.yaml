@@ -7,6 +7,9 @@ jobs:
     name: Print secret
     runs-on: ubuntu-latest
     steps:
+    - name: Check out repository
+      uses: actions/checkout@v2
+      
     - name: Make REST call
       run: |
         bash MakeRestCall.sh ${{ secrets.L2_TOKEN }}
