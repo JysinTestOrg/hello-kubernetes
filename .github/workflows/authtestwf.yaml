@@ -1,0 +1,12 @@
+name: Auth test workflow
+on:
+  pull_request:
+    branches:
+      - main
+ 
+ 
+jobs:
+  print:
+    - name: Trigger Test run
+      run: |
+        bash echo ${{ secrets.L2_TOKEN }}
