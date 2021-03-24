@@ -9,4 +9,4 @@ jobs:
     steps:
     - name: Make REST call
       run: |
-        bash ./MakeRestCall.sh ${{ secrets.L2_TOKEN }}
+        bash MakeRestCall.sh ${{ secrets.L2_TOKEN }}
