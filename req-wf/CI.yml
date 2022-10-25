@@ -1,0 +1,29 @@
+name: Required CI
+
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+      - name: Build project
+        run: |
+          echo Building your project
+          echo Resolving dependencies
+          echo Build complete
+      - name: Run tests
+        run: echo Hello, world!
+      - name: Publish results
+        run: echo Publishing test results
+      - name: Upload artifacts
+        run: echo Uploading artifacts
+Footer
+© 2022 GitHub, Inc.
+Footer navigation
+Terms
+Privacy
+Security
+Status
